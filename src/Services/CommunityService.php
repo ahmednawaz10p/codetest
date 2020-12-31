@@ -3,11 +3,21 @@
 namespace Task\GetOnBoard\Services;
 
 use Task\GetOnBoard\Entity\Post;
-use Task\GetOnBoard\Repository\CommunityRepository;
-use Task\GetOnBoard\Repository\PostRepository;
+use Task\GetOnBoard\Services\PersistanceInterface\IPostRepository;
+use Task\GetOnBoard\Services\PersistanceInterface\ICommunityRepository;
 
 class CommunityService
 {
+    protected $communityRepository;
+    protected $postRepository;
+    public function __construct(
+        ICommunityRepository $communityRepository,
+        IPostRepository $postRepository
+        )
+    {
+        $this->communityRepository = $communityRepository;
+        $this->postRepository = $postRepository;
+    }
     /**
      * gets all posts for a community
      * 
@@ -16,7 +26,7 @@ class CommunityService
      */
     public function getAllCommunityPosts($communityID)
     {
-        $community = CommunityRepository::getByID($communityID);
+        $community = $this->communityRepository->getByID($communityID);
         return $community->getPosts();
     }
 
@@ -28,7 +38,7 @@ class CommunityService
      * @return void|null
      */
     public function addPostToCommunity($communityID, $postID) {
-        $community = CommunityRepository::getByID($communityID);
+        $community = $this->communityRepository->getByID($communityID);
         if ($community == null) return null;
         $community->addPost($postID);
         
@@ -42,7 +52,7 @@ class CommunityService
      * @return void
      */
     public function removePostFromCommunity($communityID, $postID) {
-        $community = CommunityRepository::getByID($communityID);
+        $community = $this->communityRepository->getByID($communityID);
         if ($community == null) return null;
 
         $community->removePost($postID);
@@ -56,7 +66,7 @@ class CommunityService
      * @return Post|null
      */
     public function getCommunityPost($communityID, $postID): Post {
-        $posts = PostRepository::getAll();
+        $posts = $this->postRepository->getAll();
         foreach ($posts as $post) {
             if ($post->getCommunityID() == $communityID && $post->getID() == $postID)
                 return $post;

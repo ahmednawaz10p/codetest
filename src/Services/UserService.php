@@ -4,10 +4,21 @@ namespace Task\GetOnBoard\Services;
 
 use Task\GetOnBoard\Repository\PostRepository;
 use Task\GetOnBoard\Repository\UserRepository;
+use Task\GetOnBoard\Services\PersistanceInterface\IPostRepository;
+use Task\GetOnBoard\Services\PersistanceInterface\IUserRepository;
 
-class UserService
+class UserService  
 {
-    
+    protected $userRepository;
+    protected $postRepository;
+    public function __construct(
+        IUserRepository $userRepository,
+        IPostRepository $postRepository
+        )
+    {
+        $this->userRepository = $userRepository;
+        $this->postRepository = $postRepository;
+    }
     /**
      * adds post to a user
      *
@@ -16,13 +27,13 @@ class UserService
      * @return void|null
      */
     public function addPostToUser($userID, $postID) {
-        $user = UserRepository::getByID($userID);
+        $user = $this->userRepository->getByID($userID);
         if ($user == null) return null;
         $user->addPost($postID);
     }
 
     public function getUser($userID) {
-        return UserRepository::getByID($userID);
+        return $this->userRepository->getByID($userID);
     }
 
     /**
@@ -32,7 +43,7 @@ class UserService
      * @return Post[]
      */
     public function getUserPosts($userID) {
-        $posts = PostRepository::getAll();
+        $posts = $this->postRepository->getAll();
         $userPosts = [];
         foreach ($posts as $post) {
             if ($post->getUserID() == $userID) {
@@ -51,7 +62,7 @@ class UserService
      * @return void
      */
     public function removePostFromUser($userID, $postID) {
-        $user = UserRepository::getByID($userID);
+        $user = $this->userRepository->getByID($userID);
         if ($user == null) return null;
 
         $user->removePost($postID);

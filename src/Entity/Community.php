@@ -1,8 +1,7 @@
 <?php
 
 namespace Task\GetOnBoard\Entity;
-
-class Community implements IEntity
+class Community
 {
     public $id;
     public $name;

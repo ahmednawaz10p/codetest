@@ -2,19 +2,20 @@
 
 namespace Task\GetOnBoard\Repository;
 
-abstract class BaseRepository
+use Task\GetOnBoard\Services\PersistanceInterface\IBaseRepository;
+
+abstract class BaseRepository implements IBaseRepository
 {
-    // FIXME: add a generic type to fix
-    private static $items = [];
+    private $items = [];
 
    
-    public static function getAll() {
-        return self::$items;
+    public function getAll() {
+        return $this->items;
     }
 
-    public static function getByID($id)
+    public function getByID($id)
     {
-        foreach (self::$items as $item) {
+        foreach ($this->items as $item) {
             if ($item->getId() == $id) {
                 return $item;
             }
@@ -23,15 +24,15 @@ abstract class BaseRepository
         return null;
     }
 
-    public static function add($item)
+    public function add($item)
     {
-        self::$items[] = $item;
+        $this->items[] = $item;
     }
 
-    public static function removeById($id) {
-        foreach (self::$items as $key=>$item) {
+    public function removeById($id) {
+        foreach ($this->items as $key=>$item) {
             if ($item->getId() == $id) {
-                array_splice(self::$items, $key, 1);
+                array_splice($this->items, $key, 1);
             }
         }
 

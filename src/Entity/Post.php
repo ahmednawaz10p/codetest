@@ -2,8 +2,7 @@
 
 namespace Task\GetOnBoard\Entity;
 
-
-class Post implements IEntity
+class Post
 {
     private $id;
     private $text;

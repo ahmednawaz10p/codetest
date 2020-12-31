@@ -1,10 +1,9 @@
 <?php
 
-namespace Task\GetOnBoard\Entity;
-
+use Task\GetOnBoard\Entity\Post;
 use Task\GetOnBoard\Utils\Authorizable;
 
-class User implements IEntity
+class User
 {
     use Authorizable;
 
