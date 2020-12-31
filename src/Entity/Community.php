@@ -2,7 +2,7 @@
 
 namespace Task\GetOnBoard\Entity;
 
-class Community
+class Community implements IEntity
 {
     public $id;
     public $name;
@@ -30,90 +30,23 @@ class Community
     }
 
     /**
-     * @param $title
-     * @param $text
-     * @param $type
-     * @param null $parent
-     * @return Post|null
+     * @param string $postID
+     * @return void
      */
-    public function addPost($title, $text, $type, $parent = null)
+    public function addPost(string $postID)
     {
-        $post = null;
-
-        if ($type == 'article') {
-            $post = new Post();
-            $post->setTitle($title);
-            $post->setText($text);
-            $post->setType($type);
+        if ($postID != null ) {
+            $this->posts[] = $postID;
         }
-
-        if ($type == 'conversation') {
-            $post = new Post();
-            $post->setText($text);
-            $post->setType($type);
-
-            if ($parent) {
-                $post->setParent($parent);
-            }
-        }
-
-        if ($type == 'question') {
-            $post = new Post();
-            $post->setTitle($title);
-            $post->setText($text);
-            $post->setType($type);
-
-            if ($parent) {
-                $post->setParent($parent);
-            }
-        }
-
-        $this->posts[] = $post;
-
-        return $post;
     }
 
-    /**
-     * @param $id
-     * @param $title
-     * @param $text
-     * @return mixed|null
-     */
-    public function updatePost($id, $title, $text)
+    public function removePost(string $postID)
     {
-        $post = null;
-        foreach ($this->posts as $post) {
-            if ($post->id == $id) {
-                break;
+        foreach ($this->posts as $key=>$post) {
+            if ($post->getId() == $postID) {
+                array_splice($this->posts, $key, 1);
             }
         }
-
-        $post->setTitle($title);
-        $post->setText($text);
-
-        $this->posts[] = $post;
-
-        return $post;
-    }
-
-    /**
-     * @param $id
-     * @param $text
-     * @return null
-     */
-    public function addComment($parentId, $text)
-    {
-        $post = null;
-        foreach ($this->posts as $post) {
-            if ($post->id == $parentId) {
-                break;
-            }
-        }
-
-
-        $comment = $post->addComment($text);
-
-        return $comment;
     }
 
     /**
@@ -144,21 +77,5 @@ class Community
         }
 
         return $posts;
-    }
-
-    /**
-     * @param $articleId
-     * return void
-     */
-    public function disableCommentsForArticle($articleId): void
-    {
-        $post = null;
-        foreach ($this->posts as $post) {
-            if ($post->id == $articleId) {
-                break;
-            }
-        }
-
-        $post->setCommentsAllowed(false);
     }
 }

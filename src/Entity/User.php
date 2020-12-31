@@ -2,18 +2,19 @@
 
 namespace Task\GetOnBoard\Entity;
 
-class User
+class User implements IEntity
 {
-    public $id;
-    public $username;
-    public $posts;
-    public $roles;
-    public $comments;
+    private $id;
+    private $username;
+    private $posts; //for storing post IDs for a user
+    private $roles;
+    private $comments; // for storing comment ids for a user
 
     public function __construct()
     {
         $this->id = uniqid();
         $this->posts = [];
+        $this->comments = [];
     }
 
     /**
@@ -62,6 +63,21 @@ class User
     public function addPost($post): void
     {
         $this->posts[] = $post;
+    }
+
+    /**
+     * remove a user post
+     *
+     * @param string $postID
+     * @return void
+     */
+    public function removePost(string $postID)
+    {
+        foreach ($this->posts as $key=>$post) {
+            if ($post->getId() == $postID) {
+                array_splice($this->posts, $key, 1);
+            }
+        }
     }
 
     /**

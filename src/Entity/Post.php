@@ -2,16 +2,18 @@
 
 namespace Task\GetOnBoard\Entity;
 
-class Post
+
+class Post implements IEntity
 {
-    public $id;
-    public $title;
-    public $text;
-    public $type;
-    public $parent;
-    public $comments;
-    public $deleted;
-    public $commentsAllowed = true;
+    private $id;
+    private $text;
+    private $title;
+    private $type;
+    private $comments;
+    private $deleted;
+    private $commentsAllowed = true;
+    private $communityID;
+    private $userID;
 
     /**
      * Post constructor.
@@ -25,7 +27,7 @@ class Post
     /**
      * @return string
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
@@ -71,6 +73,38 @@ class Post
     }
 
     /**
+     * @param $communityID
+     */
+    public function setCommunity($communityID): void
+    {
+        $this->$communityID = $communityID;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCommunityID(): string
+    {
+        return $this->communityID;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserID(): string
+    {
+        return $this->userID;
+    }
+
+    /**
+     * @param $userID
+     */
+    public function setUserID($userID): void
+    {
+        $this->$userID = $userID;
+    }
+
+    /**
      * @param $type
      */
     public function setType($type): void
@@ -78,32 +112,16 @@ class Post
         $this->type = $type;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getParent()
-    {
-        return $this->parent;
-    }
-
-    /**
-     * @param $parent
-     */
-    public function setParent($parent): void
-    {
-        $this->parent = $parent;
-    }
+ 
 
     /**
      * @param $text
      * @return Comment
      */
-    public function addComment($text)
+    public function addComment(Comment $comment)
     {
-        $comment = new Comment();
-        $comment->setText($text);
-
-        $this->comments[] = $comment;
+        if ($this->commentsAllowed)
+            $this->comments[] = $comment;
 
         return $comment;
     }
