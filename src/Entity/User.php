@@ -2,19 +2,21 @@
 
 namespace Task\GetOnBoard\Entity;
 
+use Task\GetOnBoard\Utils\Authorizable;
+
 class User implements IEntity
 {
+    use Authorizable;
+
     private $id;
     private $username;
     private $posts; //for storing post IDs for a user
     private $roles;
-    private $comments; // for storing comment ids for a user
 
     public function __construct()
     {
         $this->id = uniqid();
         $this->posts = [];
-        $this->comments = [];
     }
 
     /**
@@ -96,19 +98,9 @@ class User implements IEntity
         $this->roles = $roles;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getComments()
-    {
-        return $this->comments;
+    public function ownsPost(Post $post) {
+        if ($post->getUserID() == $this->id) return true;
+        return false;
     }
 
-    /**
-     * @param mixed $comments
-     */
-    public function addComment($comment): void
-    {
-        $this->comments[] = $comment;
-    }
 }

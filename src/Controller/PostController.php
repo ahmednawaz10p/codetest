@@ -2,6 +2,7 @@
 
 namespace Task\GetOnBoard\Controller;
 
+use Exception;
 use Task\GetOnBoard\Services\CommunityService;
 use Task\GetOnBoard\Services\PostService;
 use Task\GetOnBoard\Services\UserService;
@@ -75,8 +76,13 @@ class PostController
      */
     public function updateAction($userId, $communityId, $postId, $title, $text)
     {
-        $post = $this->postService->getPost($postId, $communityId, $userId);
-        if ($post == null) return null;
+        $post = $this->postService->getPost($postId);
+        $user = $this->userService->getUser($userId);
+
+        if (!($user->ownsPost($post) || $user->can("edit post"))) {
+            throw new Exception("forbidden");
+        }
+
         if ($post->getType() == PostType::CONVERSATION) {
             return $this->postService->updateConversation($postId, $text);
         }   
@@ -95,12 +101,18 @@ class PostController
      *
      * DELETE
      */
-    public function deleteAction($userId, $communityId, $postID)
+    public function deleteAction($userId, $communityId, $postId)
     {
+        $user = $this->userService->getUser($userId);
+        $post = $this->postService->getPost($postId);
 
-        $this->communityService->removePostFromCommunity($communityId, $postID);
-        $this->userService->removePostFromUser($userId, $postID);
-        $this->postService->removePost($postID);
+        if (!($user->ownsPost($post) || $user->can("edit post"))) {
+            throw new Exception("forbidden");
+        }
+
+        $this->communityService->removePostFromCommunity($communityId, $postId);
+        $this->userService->removePostFromUser($userId, $postId);
+        $this->postService->removePost($postId);
 
         return null;
     }

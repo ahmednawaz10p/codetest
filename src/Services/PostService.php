@@ -82,13 +82,8 @@ class PostService
      * @param string $userID
      * @return Post|null
      */
-    public function getPost($postID, $communityID, $userID): Post {
-        $post = PostRepository::getByID($postID);
-        if ($post->getCommunityID() == $communityID && $post->getUserID() == $userID) {
-            return $post;
-        }
-
-        return null;
+    public function getPost($postID): Post {
+        return PostRepository::getByID($postID);
     }
 
     /**

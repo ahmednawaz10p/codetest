@@ -43,3 +43,10 @@ prefer you should enforce business invariants.
 
 # Submitting the code
  submit code via git.
+
+
+### Review
+- Alot of duplicate code was found in controllers which I thought should be cleaned
+- For the requested feature I created a dummy implementation of Roles and Permissions and validated the permission inside controllers. This logic can also be implemented in a middleware
+- Due to time limit I am unable to write unit and integration tests
+- In order to separate the persistance logic I am thinking to hide repositories behind abstractions so that repositories can be modified in anyway to support any database etc

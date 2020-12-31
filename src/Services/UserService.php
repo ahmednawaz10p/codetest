@@ -21,6 +21,16 @@ class UserService
         $user->addPost($postID);
     }
 
+    public function getUser($userID) {
+        return UserRepository::getByID($userID);
+    }
+
+    /**
+     * gets user posts
+     *
+     * @param string $userID
+     * @return Post[]
+     */
     public function getUserPosts($userID) {
         $posts = PostRepository::getAll();
         $userPosts = [];
