@@ -47,6 +47,17 @@ prefer you should enforce business invariants.
 
 ### Review
 - Alot of duplicate code was found in controllers which I thought should be cleaned
-- For the requested feature I created a dummy implementation of Roles and Permissions and validated the permission inside controllers. This logic can also be implemented in a middleware
+
+
+- I cleaned the Entities ( especially Community.php ) as I dont think it should have much logic about state management 
+
+
+- For the `REQUESTED FEATURE` I created a dummy implementation of Roles and Permissions and validated the permission inside controllers. This logic can also be implemented in a middleware
+
+
 - Due to time limit I am unable to write unit and integration tests
-- In order to separate the persistance logic I am thinking to hide repositories behind abstractions so that repositories can be modified in anyway to support any database etc
+
+
+- I hid the repository behind Repository Interfaces. The advantage is that now you can modify / extend repositories to your heart's content and add support for Mysql, postgress or in the future you may go to AWS DynamoDB and the app will work because you just have to create new implementation of repective repository interfaces.
+
+- As of now the Buisness logic (Entities and Services) are independent of Controllers, Databases or any Frameworks and can be plugged into any framework. This High level module ( core buisness logic ) does not depend on any Framework, DB etc
