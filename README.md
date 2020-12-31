@@ -52,7 +52,7 @@ prefer you should enforce business invariants.
 - I cleaned the Entities ( especially Community.php ) as I dont think it should have much logic about state management 
 
 
-- For the `REQUESTED FEATURE` I created a dummy implementation of Roles and Permissions and validated the permission inside controllers. This logic can also be implemented in a middleware
+- The `REQUESTED FEATURE` is quite unclear as I dont know where do you want to show the username. The simple implementation will be to get `$post`, fetch its `userID`. from `userID` fetch `User` and then get its `username` 
 
 
 - Due to time limit I am unable to write unit and integration tests
